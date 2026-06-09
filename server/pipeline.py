@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from server.expression.aggregate import aggregate_by_idarea
-from server.expression.correlate import correlate
+from server.expression.correlate import correlate, correlation_report
 from server.expression.load_csv import CsvValidationError, load_csv_genes
 from server.kegg.fetch import KeggFetchError, fetch_kegg_html, fetch_kegg_image, normalize_map_id
 from server.kegg.parse_areas import load_mapdata_areas
@@ -12,6 +12,41 @@ from server.viz.build_payload import build_visualization_payload
 
 class PipelineError(Exception):
     """User-facing pipeline failure."""
+
+    def __init__(self, message: str, *, details: dict | None = None) -> None:
+        super().__init__(message)
+        self.details = details or {}
+
+
+def _no_match_error(
+    map_id: str,
+    genes: list[dict[str, str]],
+    areas: list[dict[str, str]],
+) -> PipelineError:
+    report = correlation_report(genes, areas)
+    unmatched = report["unmatchedSymbols"]
+    symbols_text = ", ".join(unmatched)
+    message = (
+        f"No genes from your CSV matched {map_id}. "
+        f"Symbols not found on this pathway: {symbols_text}. "
+        "KEGG requires an exact match to the label in parentheses, e.g. K04363 (PDGFRA)."
+    )
+
+    hint_lines: list[str] = []
+    for symbol, options in report["suggestions"].items():
+        hint_lines.append(f"{symbol} → try: {', '.join(options)}")
+
+    if hint_lines:
+        message += " Suggestions: " + "; ".join(hint_lines) + "."
+
+    return PipelineError(
+        message,
+        details={
+            "mapId": map_id,
+            "genesInput": len(genes),
+            **report,
+        },
+    )
 
 
 def run_pipeline(pathway_input: str, csv_content: bytes | str) -> dict:
@@ -40,10 +75,7 @@ def run_pipeline(pathway_input: str, csv_content: bytes | str) -> dict:
     correlated = correlate(genes, areas)
 
     if not correlated:
-        raise PipelineError(
-            f"No genes correlated with {map_id}. "
-            f"Input: {len(genes)} genes → 0 matched on pathway."
-        )
+        raise _no_match_error(map_id, genes, areas)
 
     area_data = aggregate_by_idarea(correlated)
     summary = {

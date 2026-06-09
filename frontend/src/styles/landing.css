@@ -88,6 +88,8 @@ button[type="submit"]:disabled {
 
 .status.error {
   color: #b2182b;
+  line-height: 1.5;
+  white-space: pre-wrap;
 }
 
 .help {

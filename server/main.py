@@ -34,7 +34,8 @@ async def visualize(
         payload = run_pipeline(pathway, content)
         return JSONResponse(payload)
     except PipelineError as exc:
-        return JSONResponse({"error": str(exc)}, status_code=400)
+        body = {"error": str(exc), **exc.details}
+        return JSONResponse(body, status_code=400)
     except Exception:
         return JSONResponse(
             {"error": "Unexpected server error. Please try again."},

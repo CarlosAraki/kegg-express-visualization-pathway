@@ -15,7 +15,14 @@ export async function visualizePathway(
 
   const data = await response.json();
   if (!response.ok) {
-    throw new Error(data.error || "Visualization failed");
+    throw new Error(formatApiError(data));
   }
   return data as VisualizationPayload;
+}
+
+function formatApiError(data: Record<string, unknown>): string {
+  if (typeof data.error === "string") {
+    return data.error;
+  }
+  return "Visualization failed";
 }

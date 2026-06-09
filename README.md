@@ -99,17 +99,12 @@ POST /api/visualize
 
 ## Deploy (Vercel)
 
-The project uses **FastAPI on Vercel** (Python runtime) with the built frontend in `public/`.
+1. Connect the repository and deploy (push to main).
+2. **Build Command:** `npm run build` (writes frontend to `public/`).
+3. **Output Directory:** `public` (set in `vercel.json` — remove `dist` if still set in Project Settings → Build & Development).
+4. **API:** `api/index.py` + `server.main:app` → `GET /api/health`, `POST /api/visualize`.
 
-1. Connect the repository to Vercel.
-2. Build command: `npm run build` (builds frontend into `public/`).
-3. Entry point: `server.main:app` (configured in `pyproject.toml`).
-4. API routes: `POST /api/visualize`, `GET /api/health`.
-5. Static pages: `/`, `/viewer.html` from `public/`.
-
-Do **not** set `outputDirectory` to `frontend/dist` only — that deploys a static site without the Python API.
-
-> **Note:** KEGG data is fetched server-side at runtime. Respect [KEGG terms of use](https://www.kegg.jp/kegg/legal.html).
+If the build fails with *"No Output Directory named dist"*, the dashboard still points to `dist`. Either clear that field or leave only `vercel.json` (`outputDirectory: "public"`).
 
 ## Example pathways
 

@@ -101,12 +101,7 @@ POST /api/visualize
 
 Use **Framework Preset: Vite** with **Output Directory: `public`**.
 
-The frontend is static (Vite build). The Python API runs as **separate serverless functions**:
-
-| File | Route |
-|---|---|
-| `api/health.py` | `GET /api/health` |
-| `api/visualize.py` | `POST /api/visualize` |
+The frontend is static. The Python API is a **single serverless function** at `api/index.py` that handles all `/api/*` routes. FastAPI routes must use the **full path** (e.g. `/api/health`, not `/`).
 
 **Project Settings → Build & Development:**
 - Framework Preset: **Vite**

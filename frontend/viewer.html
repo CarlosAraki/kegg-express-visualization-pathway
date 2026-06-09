@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KEGG Expression — 3D view</title>
+    <link rel="stylesheet" href="/src/styles/viewer.css" />
+  </head>
+  <body>
+    <div id="ui">
+      <details class="project-about">
+        <summary>About this project</summary>
+        <div class="about-body">
+          <h1 id="viewer-title">KEGG pathway — 3D log2 fold change</h1>
+          <p class="intro" id="viewer-intro"></p>
+          <p id="viewer-summary"></p>
+          <div class="legend">
+            <div class="legend-item">
+              <span class="swatch pos"></span>
+              <span id="legend-pos"></span>
+            </div>
+            <div class="legend-item">
+              <span class="swatch neg"></span>
+              <span id="legend-neg"></span>
+            </div>
+          </div>
+          <div class="filter-bar">
+            <label for="pvalue-min">p-value filter (minimum p-value per area)</label>
+            <div class="filter-sliders">
+              <div class="field">
+                <span>Minimum: <strong id="pvalue-min-label"></strong></span>
+                <input type="range" id="pvalue-min" min="0" max="1000" value="0" step="1" />
+              </div>
+              <div class="field">
+                <span>Maximum: <strong id="pvalue-max-label"></strong></span>
+                <input type="range" id="pvalue-max" min="0" max="1000" value="1000" step="1" />
+              </div>
+            </div>
+            <div class="filter-meta">
+              <span id="pvalue-count"></span>
+              <button type="button" id="pvalue-reset">Clear filter</button>
+            </div>
+          </div>
+        </div>
+      </details>
+      <div class="export-bar">
+        <button type="button" id="export-png">Export isometric view (PNG)</button>
+        <button type="button" id="export-svg">Export flat pathway (SVG)</button>
+        <a href="/" class="back-link">← New analysis</a>
+      </div>
+    </div>
+    <div id="tooltip"></div>
+    <div id="hint">Drag to rotate · scroll to zoom</div>
+    <div id="canvas-host"></div>
+    <script type="module" src="/src/viewer.ts"></script>
+  </body>
+</html>

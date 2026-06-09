@@ -1,26 +1,16 @@
 {
-  "name": "nextjs",
-  "version": "0.1.0",
+  "name": "kegg-express-visualization-pathway",
   "private": true,
+  "version": "1.0.0",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
-  },
-  "dependencies": {
-    "next": "16.2.4",
-    "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "dev": "concurrently -k \"npm:dev:api\" \"npm:dev:frontend\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:api": "uvicorn server.main:app --reload --port 8000",
+    "build": "cd frontend && npm install && npm run build",
+    "test": "pytest",
+    "preview": "cd frontend && npm run preview"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.2.4",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "concurrently": "^9.0.0"
   }
 }

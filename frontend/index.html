@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KEGG Expression Visualization</title>
+    <link rel="stylesheet" href="/src/styles/landing.css" />
+  </head>
+  <body>
+    <main class="landing">
+      <header>
+        <h1>KEGG pathway expression</h1>
+        <p>
+          Visualize differential gene expression on any KEGG pathway with an
+          interactive 3D isometric view and flat SVG export.
+        </p>
+      </header>
+
+      <form id="visualize-form" class="form-card">
+        <label class="field">
+          <span>KEGG pathway</span>
+          <input
+            type="text"
+            id="pathway"
+            name="pathway"
+            placeholder="map05163 or https://www.kegg.jp/pathway/map05163"
+            required
+          />
+          <small>Accepts a map ID (<code>map#####</code>) or full KEGG URL.</small>
+        </label>
+
+        <label class="field">
+          <span>Expression CSV</span>
+          <input
+            type="file"
+            id="csv-file"
+            name="file"
+            accept=".csv,text/csv"
+            required
+          />
+          <small>
+            Required columns: <code>symbol</code>, <code>pvalue</code>,
+            <code>log2foldchange</code>. Extra columns are ignored.
+          </small>
+        </label>
+
+        <button type="submit" id="submit-btn">Visualize</button>
+        <p id="status" class="status" role="status" aria-live="polite"></p>
+      </form>
+
+      <section class="help">
+        <h2>CSV example</h2>
+        <pre><code>symbol,pvalue,log2foldchange,extra_col
+IL6,0.128,-1.1835,ignored
+SELP,0.00113,1.37716,ignored</code></pre>
+      </section>
+    </main>
+    <script type="module" src="/src/landing.ts"></script>
+  </body>
+</html>

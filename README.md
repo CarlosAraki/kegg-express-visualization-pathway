@@ -99,12 +99,26 @@ POST /api/visualize
 
 ## Deploy (Vercel)
 
-1. Connect the repository and deploy (push to main).
-2. **Build Command:** `npm run build` (writes frontend to `public/`).
-3. **Output Directory:** `public` (set in `vercel.json` — remove `dist` if still set in Project Settings → Build & Development).
-4. **API:** `api/index.py` + `server.main:app` → `GET /api/health`, `POST /api/visualize`.
+Use **Framework Preset: Vite** with **Output Directory: `public`**.
 
-If the build fails with *"No Output Directory named dist"*, the dashboard still points to `dist`. Either clear that field or leave only `vercel.json` (`outputDirectory: "public"`).
+The frontend is static (Vite build). The Python API runs as **separate serverless functions**:
+
+| File | Route |
+|---|---|
+| `api/health.py` | `GET /api/health` |
+| `api/visualize.py` | `POST /api/visualize` |
+
+**Project Settings → Build & Development:**
+- Framework Preset: **Vite**
+- Build Command: `npm run build`
+- Output Directory: `public`
+- Install Command: `npm install` (Vercel also installs `requirements.txt` for `/api/*.py`)
+
+After deploy:
+
+```bash
+curl https://your-app.vercel.app/api/health
+```
 
 ## Example pathways
 

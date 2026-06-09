@@ -3,6 +3,8 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   build: {
+    outDir: "../public",
+    emptyOutDir: true,
     rollupOptions: {
       input: {
         main: resolve(__dirname, "index.html"),
@@ -15,7 +17,6 @@ export default defineConfig({
       "/api": {
         target: "http://localhost:8000",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
   },

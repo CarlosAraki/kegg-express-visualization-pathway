@@ -99,11 +99,17 @@ POST /api/visualize
 
 ## Deploy (Vercel)
 
-1. Connect the repository to Vercel.
-2. Build command: `npm run build` (builds `frontend/dist`).
-3. Python API runs from `api/index.py` as serverless functions at `/api/*`.
+The project uses **FastAPI on Vercel** (Python runtime) with the built frontend in `public/`.
 
-> **Note:** KEGG data is fetched server-side at runtime (no large HTML files in the repo). Respect [KEGG terms of use](https://www.kegg.jp/kegg/legal.html).
+1. Connect the repository to Vercel.
+2. Build command: `npm run build` (builds frontend into `public/`).
+3. Entry point: `server.main:app` (configured in `pyproject.toml`).
+4. API routes: `POST /api/visualize`, `GET /api/health`.
+5. Static pages: `/`, `/viewer.html` from `public/`.
+
+Do **not** set `outputDirectory` to `frontend/dist` only — that deploys a static site without the Python API.
+
+> **Note:** KEGG data is fetched server-side at runtime. Respect [KEGG terms of use](https://www.kegg.jp/kegg/legal.html).
 
 ## Example pathways
 

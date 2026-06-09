@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from fastapi import FastAPI, File, Form, UploadFile
+from fastapi import APIRouter, FastAPI, File, Form, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
@@ -18,13 +18,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+api = APIRouter(prefix="/api")
 
-@app.get("/health")
+
+@api.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
-@app.post("/visualize")
+@api.post("/visualize")
 async def visualize(
     pathway: str = Form(...),
     file: UploadFile = File(...),
@@ -41,3 +43,6 @@ async def visualize(
             {"error": "Unexpected server error. Please try again."},
             status_code=500,
         )
+
+
+app.include_router(api)

@@ -15,3 +15,9 @@ dev = ["pytest>=8.0.0"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
+
+[tool.vercel]
+entrypoint = "server.main:app"
+
+[tool.vercel.scripts]
+build = "npm run build"

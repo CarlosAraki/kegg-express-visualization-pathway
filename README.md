@@ -99,21 +99,29 @@ POST /api/visualize
 
 ## Deploy (Vercel)
 
-Use **Framework Preset: Vite** with **Output Directory: `public`**.
+### Dashboard (important)
 
-The frontend is static. The Python API is a **single serverless function** at `api/index.py` that handles all `/api/*` routes. FastAPI routes must use the **full path** (e.g. `/api/health`, not `/`).
+In **Project Settings → Build & Development**, clear overrides that conflict with `vercel.json`:
 
-**Project Settings → Build & Development:**
-- Framework Preset: **Vite**
-- Build Command: `npm run build`
-- Output Directory: `public`
-- Install Command: `npm install` (Vercel also installs `requirements.txt` for `/api/*.py`)
+| Setting | Value |
+|---|---|
+| Framework Preset | **Other** (not Vite) |
+| Build Command | *(empty — use vercel.json)* |
+| Output Directory | *(empty — do not set `public` or `dist`)* |
+| Install Command | *(empty — use vercel.json)* |
+
+`vercel.json` deploys **static + Python** together:
+
+- `@vercel/static-build` → frontend in `public/`
+- `@vercel/python` → `api/index.py` for `/api/*`
 
 After deploy:
 
 ```bash
 curl https://your-app.vercel.app/api/health
 ```
+
+In the deployment log you should see both the static build and `api/index.py` (Python).
 
 ## Example pathways
 
